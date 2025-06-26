@@ -1,4 +1,18 @@
-# Yangın ve Duman Çoklu Etiket Sınıflandırma Sistemi Kullanım Kılavuzu
+# Yangın ve Duman Çoklu Etiket Sınıflandırma Sistemi Kullanım Kılavuzu (KOD2)
+
+## İçindekiler
+- [1. Proje Özeti](#1-proje-özeti)
+- [2. Klasör ve Dosya Yapısı (Özet)](#2-klasör-ve-dosya-yapısı-özet)
+- [3. Hızlı Başlangıç](#3-hızlı-başlangıç)
+  - [3.1 Gereksinimleri Yükleyin](#31-gereksinimleri-yükleyin)
+  - [3.2 Veri Hazırlama](#32-veri-hazırlama)
+  - [3.3 CNN Model Eğitimi](#33-cnn-model-eğitimi)
+  - [3.4 Model Testi ve Değerlendirme](#34-model-testi-ve-değerlendirme)
+  - [3.5 Gerçek Zamanlı Tespit](#35-gerçek-zamanlı-tespit)
+- [4. Parametreler ve Seçenekler](#4-parametreler-ve-seçenekler)
+- [5. Model Performansı ve Görselleştirme](#5-model-performansı-ve-görselleştirme)
+- [6. Dökümantasyon ve Ekstra](#6-dökümantasyon-ve-ekstra)
+- [7. Notlar](#7-notlar)
 
 ---
 
@@ -14,7 +28,7 @@
 
 ## 2. Klasör ve Dosya Yapısı (Özet)
 ```
-Fıre-Smoke-Detect/
+KOD2/
 ├── requirements.txt
 ├── dataset_tools/         # Veri hazırlama scriptleri
 ├── models/               # Eğitim, test, çıkarım, model tanımı
