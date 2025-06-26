@@ -1,0 +1,50 @@
+data:
+  base_dir: "C:/Users/Irem/OneDrive - Bursa Teknik Universitesi/Belgeler/TEZ/KOD2"
+  train_dir: "C:/Users/Irem/OneDrive - Bursa Teknik Universitesi/Belgeler/TEZ/KOD2/train"
+  val_dir: "C:/Users/Irem/OneDrive - Bursa Teknik Universitesi/Belgeler/TEZ/KOD2/val"
+  test_dir: "C:/Users/Irem/OneDrive - Bursa Teknik Universitesi/Belgeler/TEZ/KOD2/test"
+  train_csv: "C:/Users/Irem/OneDrive - Bursa Teknik Universitesi/Belgeler/TEZ/KOD2/etiketler.csv"
+  val_csv: "C:/Users/Irem/OneDrive - Bursa Teknik Universitesi/Belgeler/TEZ/KOD2/etiketler_val.csv"
+  test_csv: "C:/Users/Irem/OneDrive - Bursa Teknik Universitesi/Belgeler/TEZ/KOD2/etiketler_test.csv"
+
+model:
+  in_channels: 5  # RGB+MHI+Cascade
+  num_classes: 3  # smoke, fire, none
+  backbone: "r3d_18"
+  pretrained: false
+
+training:
+  batch_size: 8
+  num_epochs: 30
+  learning_rate: 1e-3
+  weight_decay: 1e-4
+  early_stopping_patience: 5
+  n_folds: 5
+  num_workers: 4
+  mixed_precision: true
+  gradient_clip_val: 1.0
+
+optimization:
+  n_trials: 50
+  study_name: "smoke_fire_detection"
+  storage: "sqlite:///optuna.db"
+
+augmentation:
+  train:
+    random_resized_crop:
+      height: 240
+      width: 426
+      scale: [0.8, 1.0]
+    horizontal_flip: 0.5
+    random_brightness_contrast: 0.2
+    gauss_noise: 0.1
+  val:
+    resize:
+      height: 240
+      width: 426
+
+logging:
+  tensorboard: true
+  wandb: false
+  save_dir: "logs"
+  checkpoint_dir: "checkpoints" 
