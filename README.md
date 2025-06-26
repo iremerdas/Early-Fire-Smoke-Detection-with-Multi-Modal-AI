@@ -20,7 +20,7 @@ Bu proje, RGB + MHI + Optical Flow verilerini kullanarak **duman ve ateş tespit
 
 ## 📁 Proje Klasör Yapısı
 ```
-KOD2/
+Fire-Smoke-Detect/
 ├── README.md
 ├── requirements.txt
 ├── config.yaml
@@ -151,6 +151,9 @@ python live/live_detection_pipeline.py \
 - `--scheduler` : step, cosine
 - `--batch_size`, `--epochs`, `--lr`, `--patience`, `--checkpoint_interval`
 
+### YOLO Eğitimi
+- `--data_dir`, `--annotation_file`, `--output_dir`, `--epochs`, `--batch_size`, `--imgsz`, `--model_size`, `--train_split`, `--validate_only`
+
 ### Live Detection Pipeline
 - `--cnn_model` : Eğitilmiş CNN model dosyası
 - `--yolo_model` : YOLO model dosyası
@@ -159,9 +162,6 @@ python live/live_detection_pipeline.py \
 - `--threshold` : Pozitif sahne eşiği (varsayılan 0.5)
 - `--sequence_length` : MHI için frame sayısı (varsayılan 5)
 - `--no_logging` : Logging sistemini kapat
-
-### YOLO Eğitimi
-- `--data_dir`, `--annotation_file`, `--output_dir`, `--epochs`, `--batch_size`, `--imgsz`, `--model_size`, `--train_split`, `--validate_only`
 
 ---
 
@@ -176,7 +176,9 @@ python live/live_detection_pipeline.py \
 ## 📚 Dökümantasyon ve Ekstra
 - **KULLANIM_KILAVUZU.md**: Detaylı kullanım ve pipeline akışı
 - **USAGE_live_detection_pipeline.md**: Canlı tespit pipeline'ı için özel kılavuz
-- **README_pipeline_akisi.md**: Akış diyagramları ve pipeline açıklamaları
+- **USAGE_label_extractor.md**: Özel görüntü ve hareket verilerinden etiket çıkarımı için kılavuz
+- **USAGE_rgb_mhi_stack_with_flow.md**: 5 kanallı .npy dosyaları oluşturmak için kılavuz
+- **USAGE_yolo_training.md**: YOLO eğitimi için kılavuzu
 
 ---
 
