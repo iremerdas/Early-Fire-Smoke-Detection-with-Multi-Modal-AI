@@ -2,7 +2,7 @@
 5-Channel Early Wildfire Detection: RGB-MHI-Flow + CNN-YOLO Pipeline
  ---
 
- # Fire/Smoke Detection System (KOD2)
+ # Fire/Smoke Detection System 
 
 Bu proje, RGB + MHI + Optical Flow verilerini kullanarak **duman ve ateş tespiti** yapan, hem sahne sınıflandırması hem de nesne tespiti (YOLO) destekli, gerçek zamanlı ve offline çalışabilen bir derin öğrenme sistemidir.
 
