@@ -1,4 +1,4 @@
-# Yangın ve Duman Çoklu Etiket Sınıflandırma Sistemi Kullanım Kılavuzu (KOD2)
+# Yangın ve Duman Çoklu Etiket Sınıflandırma Sistemi Kullanım Kılavuzu
 
 ---
 
@@ -14,7 +14,7 @@
 
 ## 2. Klasör ve Dosya Yapısı (Özet)
 ```
-KOD2/
+Fıre-Smoke-Detect/
 ├── requirements.txt
 ├── dataset_tools/         # Veri hazırlama scriptleri
 ├── models/               # Eğitim, test, çıkarım, model tanımı
