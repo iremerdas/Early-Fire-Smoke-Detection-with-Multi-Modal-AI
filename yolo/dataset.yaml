@@ -1,0 +1,9 @@
+names:
+  0: smoke
+  1: fire
+  2: none
+nc: 3
+path: C:\Users\Irem\OneDrive - Bursa Teknik Universitesi\Belgeler\TEZ\KOD\D-Fire\data_split
+test: null
+train: train/images
+val: val/images
