@@ -8,25 +8,26 @@ from tqdm import tqdm
 import re
 
 def extract_base_name(img_name):
-    """Augment edilmiş görsel adından orijinal adı çıkar"""
+    """Augment edilmiş görsel adından orijinal adı çıkarma"""
     if img_name.startswith('aug_'):
         # aug_0_original_name.jpg -> original_name
-        parts = img_name.split('_', 2)  # En fazla 2 kez böl
+        parts = img_name.split('_', 2)  
         if len(parts) >= 3:
             return parts[2].rsplit('.', 1)[0]  # Uzantıyı kaldır
     return img_name.rsplit('.', 1)[0]  # Uzantıyı kaldır
 
 def group_images_by_prefix(image_folder, include_augmented=True):
-    groups = defaultdict(list)
-    augmented_groups = defaultdict(list)
+    """Görsel isimlerine, ön eklerine, göre gruplandırma"""
+    groups = defaultdict(list) # normal gurp
+    augmented_groups = defaultdict(list) # augmente edilmişler için grup
     
     for img in os.listdir(image_folder):
         if not img.lower().endswith('.jpg'):
             continue
-            
+        #Augemnte edilmiş görsel dosyaları gruplandırma    
         if img.startswith('aug_'):
             if not include_augmented:
-                continue
+                continue # kullanıcı dahil et demediyse atla
             # Augment edilmiş görsel - orijinal adına göre grupla
             base_name = extract_base_name(img)
             if base_name.startswith('WEB'):
@@ -80,13 +81,18 @@ def group_augmented_images_by_original(image_folder):
     return original_to_augmented
 
 def compute_mhi_for_group(image_folder, images, N=5, threshold=30, output_folder=None):
+    """
+    MHI hesaplama
+    N: ardışık kare sayısı
+    threshold: fark görüntüsü için eşik değeri
+    """
     if len(images) < N:
         print(f"MHI için yeterli ardışık kare yok: {images}")
         return
-    h, w = None, None
-    for start in range(len(images) - N + 1):
+    h, w = None, None # görsel boyutları
+    for start in range(len(images) - N + 1): # 5’li pencere
         mhi = None
-        for i in range(N - 1):
+        for i in range(N - 1): # 4 çift oluşturmak için 0–3
             img1 = cv2.imread(os.path.join(image_folder, images[start + i]))
             img2 = cv2.imread(os.path.join(image_folder, images[start + i + 1]))
             if img1 is None or img2 is None:
@@ -94,7 +100,7 @@ def compute_mhi_for_group(image_folder, images, N=5, threshold=30, output_folder
             if h is None or w is None:
                 h, w = img1.shape[:2]
             if img1.shape[:2] != (h, w):
-                img1 = cv2.resize(img1, (w, h))
+                img1 = cv2.resize(img1, (w, h)) # Boyut uyumsuzluklarını düzeltme
             if img2.shape[:2] != (h, w):
                 img2 = cv2.resize(img2, (w, h))
             if img1.ndim == 2:
@@ -103,13 +109,13 @@ def compute_mhi_for_group(image_folder, images, N=5, threshold=30, output_folder
                 img2 = cv2.cvtColor(img2, cv2.COLOR_GRAY2BGR)
             gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
             gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
-            diff = cv2.absdiff(gray2, gray1)
-            _, motion_mask = cv2.threshold(diff, threshold, 1, cv2.THRESH_BINARY)
+            diff = cv2.absdiff(gray2, gray1) # Kareler arası fark görüntüsü
+            _, motion_mask = cv2.threshold(diff, threshold, 1, cv2.THRESH_BINARY) # Hareket maskesi
             if mhi is None:
-                mhi = np.zeros((h, w), dtype=np.float32)
-            mhi[motion_mask == 1] = N
-            mhi[motion_mask == 0] -= 1
-            mhi[mhi < 0] = 0
+                mhi = np.zeros((h, w), dtype=np.float32) # İlk MHI sıfırdan oluştur
+            mhi[motion_mask == 1] = N # Hareket varsa değeri maksimuma getir
+            mhi[motion_mask == 0] -= 1 # Hareket yoksa zamanla azalsın
+            mhi[mhi < 0] = 0 # Negatifleri sıfırla
         # Her pencere için ayrı MHI kaydet
         mhi_img = np.uint8((mhi / N) * 255)
         if output_folder is not None:
