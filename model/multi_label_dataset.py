@@ -8,28 +8,27 @@ from PIL import Image
 
 def default_transform(x):
     """
-    Default transform for numpy arrays.
-    Handles different array shapes and converts them to a torch tensor
-    in the shape (T, C, H, W).
+    Giriş numpy dizisini PyTorch tensörüne dönüştürmek için kullanılır
+    Farklı dizi şekillerini işler ve bunları (T, C, H, W) şeklinde bir torch tensörüne dönüştürür
     """
-    # x: (T, H, W, C) or (H, W, C) or (C, H, W) or (T, C, H, W)
+    # x'in boyutuna göre dönüşüm yapılacak: örneğin (H,W,C), (T,H,W,C), (C,H,W) olabilir
     if x.ndim == 4 and x.shape[-1] == 5:
-        # (T, H, W, 5) -> (T, 5, H, W)
+        # (T, H, W, 5) -> (T, 5, H, W): kanal son sıradaysa transpose ile alınır
         x = np.ascontiguousarray(x.transpose(0, 3, 1, 2))
     elif x.ndim == 3 and x.shape[0] == 5:
-        # (5, H, W) -> (1, 5, H, W)
+        # (5, H, W) -> (1, 5, H, W): tek örnek olduğu için batch boyutu eklenir
         x = x[None, ...]
     elif x.ndim == 3 and x.shape[-1] == 5:
-        # (H, W, 5) -> (1, 5, H, W)
+        # (H, W, 5) -> (1, 5, H, W): transpose ve batch eklenir
         x = np.ascontiguousarray(x.transpose(2, 0, 1)[None, ...])
-    # Ensure output is a tensor
+    # çıktının tensor olduğundan emin ol !!
     if not isinstance(x, torch.Tensor):
-        x = torch.from_numpy(x).float()
+        x = torch.from_numpy(x).float() # float32 dönüşümü yapılır (model girişleri için)
     return x
 
 class MultiLabelDataset(Dataset):
-    """Multi-label dataset for smoke/fire classification
-    Label encoding:
+    """Çoklu sınıflandırma için veri kümesi
+    Etiket kodlaması:
     - only class 0 (smoke) → [1,0,0]
     - only class 1 (fire) → [0,1,0]
     - both class 0 and 1 → [1,1,0]
@@ -41,7 +40,7 @@ class MultiLabelDataset(Dataset):
         self.target_size = target_size
         self.samples = []
         
-        # Default transforms for 5-channel input (RGB + MHI + Flow)
+        # 5 kanallı giriş (RGB + MHI + Flow) için default transformlar
         if transform is None:
             self.transform = default_transform
         else:
