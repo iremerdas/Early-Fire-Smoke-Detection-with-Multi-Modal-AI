@@ -7,7 +7,7 @@ import argparse
 
 def get_five_image_group_from_mhi_filename(mhi_filename, rgb_dir):
     """
-    MHI dosya adına göre ilgili 5'li ardışık görsel grubunun dosya adlarını bulur.
+    MHI dosya adına göre ilgili 5'li ardışık görsel grubunun dosya adlarını bulur
     Sıralama: 0,1,2,3,4 (veya WEB00000_to_WEB00004_mhi.npy -> WEB00000.jpg ... WEB00004.jpg)
     """
     if mhi_filename.startswith('aug_'):
