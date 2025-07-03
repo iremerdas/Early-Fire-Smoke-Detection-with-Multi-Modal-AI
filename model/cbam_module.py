@@ -41,7 +41,7 @@ class CBAM(nn.Module):
         out = out * self.sa(out)
         return out
 
-# 3D CNN için CBAM (isteğe bağlı)
+# 3D CNN için CBAM 
 class CBAM3D(nn.Module):
     def __init__(self, in_planes, ratio=16, kernel_size=7):
         super(CBAM3D, self).__init__()
