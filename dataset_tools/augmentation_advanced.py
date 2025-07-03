@@ -10,12 +10,12 @@ bbox_params = A.BboxParams(
 )
 
 additional_targets = {
-    'red_ratio': 'mask',
+    #'red_ratio': 'mask',
     'flow':      'mask',
     'mhi':       'mask'
 }
 
-# --- Fire ---
+# Fire 
 fire_transform = A.Compose([
     A.HueSaturationValue(hue_shift_limit=15, sat_shift_limit=50, val_shift_limit=50, p=0.8),
     A.RandomBrightnessContrast(brightness_limit=0.4, contrast_limit=0.4, p=0.7),
@@ -29,7 +29,7 @@ fire_transform = A.Compose([
     ToTensorV2(),
 ], bbox_params=bbox_params, additional_targets=additional_targets)
 
-# --- Smoke ---
+# Smoke
 smoke_transform = A.Compose([
     A.GaussianBlur(blur_limit=(5,15), p=0.7),
     A.GaussNoise(mean=0, var_limit=(10.0, 50.0), p=0.5),
@@ -43,7 +43,7 @@ smoke_transform = A.Compose([
     ToTensorV2(),
 ], bbox_params=bbox_params, additional_targets=additional_targets)
 
-# --- Both (Fire + Smoke) ---
+# Both (Fire + Smoke)
 both_transform = A.Compose([
     A.OneOf([
         A.HueSaturationValue(hue_shift_limit=15, sat_shift_limit=50, val_shift_limit=50, p=0.7),
@@ -65,7 +65,7 @@ both_transform = A.Compose([
     ToTensorV2(),
 ], bbox_params=bbox_params, additional_targets=additional_targets)
 
-# --- None (Negative) ---
+# None (Negative)
 none_transform = A.Compose([
     A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.5),
     A.GaussianBlur(blur_limit=7, p=0.4),
@@ -78,7 +78,7 @@ none_transform = A.Compose([
     ToTensorV2(),
 ], bbox_params=bbox_params, additional_targets=additional_targets)
 
-# --- Sınıfa Göre Transform Seçimi ---
+# Sınıfa Göre Transform Seçimi
 def get_transform_for_labels(labels):
     """
     labels: list veya tensor şeklinde sınıf ID'leri 
@@ -95,7 +95,7 @@ def get_transform_for_labels(labels):
     else:                    # none veya diğer
         return none_transform
 
-# --- MixUp ve Mosaic için altyapı şablonu (batch bazlı uygulanır) ---
+# MixUp ve Mosaic için altyapı şablonu (batch bazlı uygulanır)
 def mixup(image1, label1, image2, label2, alpha=0.4):
     """İki görüntü ve etiketi MixUp ile karıştırır."""
     import numpy as np
@@ -104,12 +104,12 @@ def mixup(image1, label1, image2, label2, alpha=0.4):
     mixed_label = lam * label1 + (1 - lam) * label2
     return mixed_image.astype(image1.dtype), mixed_label
 
-# Mosaic için de benzer şekilde 4 görüntü birleştirilebilir.
-# Bunlar batch oluşturulurken veri loader veya collate_fn içinde uygulanmalı.
+# Mosaic için de benzer şekilde 4 görüntü birleştirilebilir
+# Bunlar batch oluşturulurken veri loader veya collate_fn içinde uygulanmalı
 
-# --- Frame atlama ve temporal jitter (video tabanlı augmentasyon) ---
+# Frame atlama ve temporal jitter (video tabanlı augmentasyon)
 def temporal_augment(frames, shuffle_prob=0.3, skip_prob=0.3):
-    """Frame sırası karıştırma ve frame atlama uygular."""
+    """Frame sırası karıştırma ve frame atlama uygular"""
     import random
     frames = frames.copy()
     # Frame sırası karıştırma
